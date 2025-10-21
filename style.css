@@ -270,10 +270,17 @@ header h1 {
     width: 100%;
     flex: 1;
     min-height: 300px;
+    background: white; /* White background for all chart areas */
+    border-radius: 8px;
+    padding: 0.5rem;
 }
 
 .map-container {
     min-height: 550px;
+    padding: 0; /* Remove padding for full-width map */
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .chart-description {
@@ -382,7 +389,7 @@ select:focus, .btn:focus {
 
 #educationTableContainer, #regionTableContainer {
     margin-top: 1rem;
-    background: var(--bg-main);
+    background: white; /* White background for tables */
     border-radius: 8px;
     padding: 1rem;
     overflow-x: auto;
@@ -399,18 +406,19 @@ select:focus, .btn:focus {
 #regionTable th, #regionTable td {
     padding: 0.75rem;
     text-align: left;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151; /* Dark text for readability on white background */
 }
 
 #educationTable th, #regionTable th {
     font-weight: 600;
-    color: var(--primary);
-    background-color: #374151;
+    color: #1f2937; /* Darker text for headers */
+    background-color: #f3f4f6; /* Light gray background for headers */
 }
 
 #educationTable tbody tr:hover,
 #regionTable tbody tr:hover {
-    background-color: #111827;
+    background-color: #f9fafb;
 }
 
 #educationTable tbody tr:last-child td,

@@ -8,15 +8,15 @@ function cssVar(name, fallback = '') {
     return v ? v.trim() : fallback;
 }
 
-// Enhanced Vega-Lite config with dark theme
-const vegaDarkThemeConfig = {
-    background: "transparent",
+// Enhanced Vega-Lite config with white chart backgrounds
+const vegaChartConfig = {
+    background: "white",
     view: { stroke: "transparent" },
     axis: {
         domainColor: "#374151", // gray-700
-        gridColor: "#374151", // gray-700
-        labelColor: "#d1d5db", // gray-300
-        titleColor: "#f9fafb", // gray-50
+        gridColor: "#f3f4f6", // gray-100
+        labelColor: "#374151", // gray-700
+        titleColor: "#1f2937", // gray-800
         labelFont: cssVar('--font-sans'),
         titleFont: cssVar('--font-sans'),
         labelFontSize: 12,
@@ -25,13 +25,13 @@ const vegaDarkThemeConfig = {
         labelAngle: 0
     },
     legend: {
-        labelColor: "#d1d5db", // gray-300
-        titleColor: "#f9fafb", // gray-50
+        labelColor: "#374151", // gray-700
+        titleColor: "#1f2937", // gray-800
         labelFont: cssVar('--font-sans'),
         titleFont: cssVar('--font-sans'),
     },
     title: {
-        color: "#f9fafb", // gray-50
+        color: "#1f2937", // gray-800
         font: cssVar('--font-sans'),
         fontSize: 16,
         fontWeight: 600
@@ -94,21 +94,19 @@ const stateColors = {
     "VIC": "#f97316", 
     "QLD": "#eab308", 
     "WA": "#22c55e", 
-    "SA": "#3b82f6",
-    "NT": "#14b8a6",
-    "TAS": "#8b5cf6",
-    "ACT": "#d946ef"
+    "SA": "#3b82f6"
 };
 
 const trendColors = { 
-    arrivals: "#3b82f6", 
+    arrivals: "#7f1d1d", // Dark maroon for arrivals
     departures: "#f97316", 
     net: "#22c55e" 
 };
 
+// Updated visa colors with different shades
 const visaColors = { 
     domain: ["temporary", "australian", "permanent", "nz", "unknown"], 
-    range: ["#3b82f6", "#16a34a", "#f97316", "#ef4444", "#6b7280"] 
+    range: ["#1e40af", "#15803d", "#ea580c", "#dc2626", "#64748b"] // Different shades
 };
 
 /* ============================
@@ -167,7 +165,11 @@ function renderEnhancedMap() {
     const mapSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
-        "height": mapIsFullscreen ? Math.max(500, window.innerHeight - 150) : 600,
+        "height": mapIsFullscreen ? Math.max(500, window.innerHeight - 150) : 550,
+        "autosize": {
+            "type": "fit",
+            "contains": "padding"
+        },
         "projection": { 
             "type": "equalEarth",
             "center": [135, -25],
@@ -234,8 +236,8 @@ function renderEnhancedMap() {
                     "dy": -15,
                     "fontSize": 10,
                     "fontWeight": "bold",
-                    "fill": "#f9fafb",
-                    "stroke": "rgba(17, 24, 39, 0.8)",
+                    "fill": "#1f2937",
+                    "stroke": "white",
                     "strokeWidth": 3
                 },
                 "encoding": {
@@ -245,7 +247,7 @@ function renderEnhancedMap() {
                 }
             }
         ],
-        "config": vegaDarkThemeConfig
+        "config": vegaChartConfig
     };
     
     vegaEmbed('#worldMap', mapSpec, { actions: false, renderer: 'svg' }).catch(console.error);
@@ -261,7 +263,11 @@ function renderStateChart() {
         if (!s || s.toLowerCase() === 'unknown') return;
         agg[s] = (agg[s] || 0) + (+d.migrants || 0);
     });
-    let rows = Object.keys(agg).map(k => ({ settlement_state: k, migrants: agg[k] }));
+    
+    // Filter out states with no data
+    let rows = Object.keys(agg)
+        .filter(k => agg[k] > 0)
+        .map(k => ({ settlement_state: k, migrants: agg[k] }));
 
     const spec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -273,7 +279,7 @@ function renderStateChart() {
             "y": { "field": "migrants", "type": "quantitative", "title": "Number of Migrants", "axis": { "grid": false } },
             "color": { "field": "settlement_state", "type": "nominal", "title": "State", "scale": { "domain": Object.keys(stateColors), "range": Object.values(stateColors) } }
         },
-        "config": vegaDarkThemeConfig
+        "config": vegaChartConfig
     };
     vegaEmbed('#stateChart', spec, { actions: false, renderer: 'svg' }).catch(console.error);
 }
@@ -293,13 +299,13 @@ function renderRegionChart() {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 280,
         "data": { "values": rows },
-        "mark": { "type": "arc", "innerRadius": 70, "tooltip": true, "stroke": "#1f2937", "strokeWidth": 2 },
+        "mark": { "type": "arc", "innerRadius": 70, "tooltip": true, "stroke": "white", "strokeWidth": 2 },
         "encoding": {
             "theta": { "field": "migrants", "type": "quantitative", "stack": true },
             "color": { "field": "region", "type": "nominal", "scale": { "domain": regionDomain, "range": regionRange }, "title": "Region" },
             "tooltip": [{ "field": "region", "title": "Region" }, { "field": "migrants", "title": "Migrants", "format": "," }]
         },
-        "config": vegaDarkThemeConfig
+        "config": vegaChartConfig
     };
     vegaEmbed('#regionChart', spec, { actions: false, renderer: 'svg' }).catch(console.error);
     setupRegionTable(rows);
@@ -341,7 +347,7 @@ function renderCountryChart() {
             "color": { "field": "country", "type": "nominal", "scale": { "scheme": "tableau10" }, "legend": null },
             "tooltip": [{ "field": "country", "title": "Country" }, { "field": "migrants", "title": "Migrants", "format": "," }, { "field": "region", "title": "Region" }, { "field": "rank", "title": "Rank" }]
         },
-        "config": vegaDarkThemeConfig
+        "config": vegaChartConfig
     };
     vegaEmbed('#countryChart', spec, { actions: false, renderer: 'svg' }).catch(console.error);
 }
@@ -381,7 +387,7 @@ function renderTrendChart() {
             }
         };
     }
-    spec.config = vegaDarkThemeConfig;
+    spec.config = vegaChartConfig;
     vegaEmbed('#trendChart', spec, { actions: false, renderer: 'svg' }).catch(console.error);
 }
 
@@ -405,7 +411,7 @@ function renderVisaChart(selectedVisaType = "All") {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "width": "container", "height": 320,
             "data": { "values": visaData },
-            "mark": { "type": "line", "point": { "filled": false, "fill": "#1f2937" }, "strokeWidth": 3, "tooltip": true },
+            "mark": { "type": "line", "point": { "filled": false, "fill": "white" }, "strokeWidth": 3, "tooltip": true },
             "encoding": {
                 "x": { "field": "year", "type": "ordinal", "title": "Year", "axis": { "labelAngle": -45 } },
                 "y": { "field": selectedVisaType, "type": "quantitative", "title": "Number (thousands)" },
@@ -413,7 +419,7 @@ function renderVisaChart(selectedVisaType = "All") {
             }
         };
     }
-    spec.config = vegaDarkThemeConfig;
+    spec.config = vegaChartConfig;
     vegaEmbed('#visaChart', spec, { actions: false, renderer: 'svg' }).catch(console.error);
 }
 
@@ -423,14 +429,14 @@ function renderEducationChart() {
         "width": "container", "height": 280,
         "data": { "values": educationData },
         "transform": [{ "fold": ["2015-2019", "2010-2014", "Before 2010", "Total"], "as": ["category", "percentage"] }],
-        "mark": { "type": "rect", "tooltip": true, "stroke": "#1f2937", "strokeWidth": 2 },
+        "mark": { "type": "rect", "tooltip": true, "stroke": "white", "strokeWidth": 2 },
         "encoding": {
             "x": { "field": "visaStream", "type": "nominal", "title": "Visa Stream" },
             "y": { "field": "category", "type": "nominal", "title": "Arrival Period", "sort": ["2015-2019", "2010-2014", "Before 2010", "Total"] },
             "color": { "field": "percentage", "type": "quantitative", "scale": { "scheme": "blues" }, "title": "% Enrolled" },
             "tooltip": [{ "field": "visaStream", "title": "Visa Stream" }, { "field": "category", "title": "Period" }, { "field": "percentage", "title": "% Enrolled", "format": ".1f" }]
         },
-        "config": vegaDarkThemeConfig
+        "config": vegaChartConfig
     };
     vegaEmbed('#educationChart', spec, { actions: false, renderer: 'svg' }).catch(console.error);
     setupEducationTable();
