@@ -31,14 +31,30 @@
     <main id="main-content" role="main" class="dashboard-container" aria-labelledby="dashboard-title">
         <h2 id="dashboard-title" class="sr-only">Global Migration to Australia Dashboard</h2>
 
-        <!-- About section -->
+        <!-- About section with stats cards -->
         <section class="intro-container" role="region" aria-labelledby="about-heading">
-            <div class="about-icon">
-                <i class="fas fa-info-circle" aria-hidden="true"></i>
+            <div class="about-section">
+                <div class="about-icon">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i>
+                </div>
+                <div class="about-content">
+                    <h2 id="about-heading">About This Dashboard</h2>
+                    <p>This dashboard visualizes Australia's migration landscape, showcasing origins, settlement patterns, and temporal trends based on official data from the Australian Bureau of Statistics.</p>
+                </div>
             </div>
-            <div class="about-content">
-                <h2 id="about-heading">About This Dashboard</h2>
-                <p>This dashboard visualizes Australia's migration landscape, showcasing origins, settlement patterns, and temporal trends based on official data.</p>
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Source Countries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2023</div>
+                    <div class="stat-label">Latest Data Year</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Australian States</div>
+                </div>
             </div>
         </section>
 
@@ -94,17 +110,21 @@
                     </div>
                 </div>
 
-                <div class="chart-box chart-priority-7">
+                <div class="chart-box chart-priority-7 regional-chart">
                     <div class="chart-header">
                         <h2><i class="fas fa-chart-pie" aria-hidden="true"></i> Regional Migration Sources</h2>
                     </div>
                     <p class="data-year">Source data: 2023</p>
-                    <div id="regionChart" class="chart-container" role="region" aria-labelledby="regionChart-desc"></div>
-                    <div class="chart-description" id="regionChart-desc">
-                        <p><strong>Insight:</strong> Asia accounts for the overwhelming majority of migration to Australia, reflecting both geographic proximity and strong historical ties. Europe maintains a significant presence as the second-largest source region, while other continents contribute smaller but notable shares to Australia's diverse migrant population.</p>
-                    </div>
-                     <div class="table-controls">
-                        <button id="showRegionTable" class="btn btn-secondary">View as table</button>
+                    <div class="regional-content">
+                        <div id="regionChart" class="chart-container regional-chart-container" role="region" aria-labelledby="regionChart-desc"></div>
+                        <div class="regional-insights">
+                            <div class="chart-description" id="regionChart-desc">
+                                <p><strong>Insight:</strong> Asia accounts for the overwhelming majority of migration to Australia, reflecting both geographic proximity and strong historical ties. Europe maintains a significant presence as the second-largest source region, while other continents contribute smaller but notable shares to Australia's diverse migrant population.</p>
+                            </div>
+                            <div class="table-controls">
+                                <button id="showRegionTable" class="btn btn-secondary">View as table</button>
+                            </div>
+                        </div>
                     </div>
                     <div id="regionTableContainer" style="display:none;">
                         <!-- filled by script.js -->

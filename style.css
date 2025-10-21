@@ -123,10 +123,17 @@ header h1 {
     margin-bottom: 2.5rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+    border: 1px solid var(--border);
+}
+
+.about-section {
+    display: grid;
     grid-template-columns: auto 1fr;
     gap: 1.5rem;
     align-items: center;
-    border: 1px solid var(--border);
 }
 
 .about-icon {
@@ -153,6 +160,41 @@ header h1 {
     font-size: 0.95rem;
     line-height: 1.6;
     color: var(--text);
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    min-width: 300px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #bfdbfe;
+    line-height: 1.2;
 }
 
 .charts-container {
@@ -190,11 +232,11 @@ header h1 {
     opacity: 0;
 }
 
-/* Priority-based sizing */
+/* Priority-based sizing - UNIFIED HEIGHTS PER ROW */
 .chart-priority-1 { min-height: 650px; }
-.chart-priority-2, .chart-priority-3, .chart-priority-4 { min-height: 500px; }
-.chart-priority-5, .chart-priority-6 { min-height: 450px; }
-.chart-priority-7 { min-height: 400px; }
+.chart-priority-2, .chart-priority-7 { min-height: 520px; } /* Unified height */
+.chart-priority-3, .chart-priority-4 { min-height: 520px; } /* Unified height */
+.chart-priority-5, .chart-priority-6 { min-height: 520px; } /* Unified height */
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
@@ -218,6 +260,35 @@ header h1 {
 .chart-box.full-width-map .chart-description {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+}
+
+/* Regional chart specific styling */
+.regional-chart .regional-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.regional-chart-container {
+    min-height: 280px;
+}
+
+.regional-insights {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+    .regional-chart .regional-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .regional-insights {
+        order: -1;
+    }
 }
 
 .chart-header {
@@ -384,16 +455,18 @@ select:focus, .btn:focus {
 }
 
 .table-controls {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 }
 
+/* FIX: Make table containers scrollable to prevent layout shifts */
 #educationTableContainer, #regionTableContainer {
     margin-top: 1rem;
     background: white; /* White background for tables */
     border-radius: 8px;
     padding: 1rem;
-    overflow-x: auto;
     border: 1px solid var(--border);
+    max-height: 250px; /* Constrain height */
+    overflow-y: auto; /* Add vertical scroll */
 }
 
 #educationTable, #regionTable {
@@ -460,16 +533,31 @@ footer {
 
 @media (max-width: 768px) {
     header h1 { font-size: 2.2rem; }
+    
     .intro-container {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.5rem;
         padding: 1.5rem;
     }
+    
+    .about-section {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+    }
+    
     .about-icon {
         width: 40px;
         height: 40px;
         font-size: 1.2rem;
+        margin: 0 auto;
     }
+    
+    .stats-cards {
+        grid-template-columns: 1fr;
+        min-width: auto;
+    }
+    
     .map-container { min-height: 400px; }
     .chart-filter, .chart-filter-group {
         flex-direction: column;

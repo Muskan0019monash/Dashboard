@@ -41,27 +41,28 @@ const vegaChartConfig = {
 /* ============================
  Embedded Data
  ============================ */
-let migrationData = [
- {country:"United Kingdom",latitude:51.5072,longitude:-0.1276,migrants:1000000,settlement_state:"NSW",region:"Europe",year:2023},
- {country:"China",latitude:39.9042,longitude:116.4074,migrants:680000,settlement_state:"VIC",region:"Asia",year:2023},
- {country:"India",latitude:28.6139,longitude:77.2090,migrants:720000,settlement_state:"NSW",region:"Asia",year:2023},
- {country:"Philippines",latitude:12.8797,longitude:121.7740,migrants:320000,settlement_state:"WA",region:"Asia",year:2023},
- {country:"Vietnam",latitude:21.0285,longitude:105.8544,migrants:300000,settlement_state:"SA",region:"Asia",year:2023},
- {country:"Sri Lanka",latitude:7.8731,longitude:80.7718,migrants:180000,settlement_state:"NSW",region:"Asia",year:2023},
- {country:"Malaysia",latitude:3.1390,longitude:101.6869,migrants:150000,settlement_state:"VIC",region:"Asia",year:2023},
- {country:"Nepal",latitude:28.3949,longitude:85.3240,migrants:130000,settlement_state:"NSW",region:"Asia",year:2023},
- {country:"South Africa",latitude:-26.2041,longitude:28.0473,migrants:120000,settlement_state:"QLD",region:"Africa",year:2023},
- {country:"Pakistan",latitude:30.3753,longitude:69.3451,migrants:110000,settlement_state:"NSW",region:"Asia",year:2023},
- {country:"Italy",latitude:41.9028,longitude:12.4964,migrants:95000,settlement_state:"WA",region:"Europe",year:2023},
- {country:"Greece",latitude:39.0742,longitude:21.8243,migrants:90000,settlement_state:"SA",region:"Europe",year:2023},
- {country:"Indonesia",latitude:-0.7893,longitude:113.9213,migrants:85000,settlement_state:"NT",region:"Asia",year:2023},
- {country:"Bangladesh",latitude:23.6850,longitude:90.3563,migrants:80000,settlement_state:"NSW",region:"Asia",year:2023},
- {country:"Ireland",latitude:53.4129,longitude:-8.2439,migrants:75000,settlement_state:"QLD",region:"Europe",year:2023},
- {country:"Singapore",latitude:1.3521,longitude:103.8198,migrants:70000,settlement_state:"VIC",region:"Asia",year:2023},
- {country:"Hong Kong",latitude:22.3193,longitude:114.1694,migrants:65000,settlement_state:"NSW",region:"Asia",year:2023},
- {country:"United States",latitude:37.0902,longitude:-95.7129,migrants:62000,settlement_state:"WA",region:"North America",year:2023},
- {country:"Lebanon",latitude:33.8547,longitude:35.8623,migrants:60000,settlement_state:"NSW",region:"Middle East",year:2023},
- {country:"Fiji",latitude:-17.7134,longitude:178.065,migrants:55000,settlement_state:"QLD",region:"Oceania",year:2023}
+// New dataset provided by the user
+const migrationData = [
+    { country: "India", latitude: 20.5937, longitude: 78.9629, migrants: 720000, settlement_state: "NSW", region: "Asia" },
+    { country: "China", latitude: 35.8617, longitude: 104.1954, migrants: 680000, settlement_state: "VIC", region: "Asia" },
+    { country: "United Kingdom", latitude: 55.3781, longitude: -3.4360, migrants: 550000, settlement_state: "QLD", region: "Europe" },
+    { country: "Philippines", latitude: 12.8797, longitude: 121.7740, migrants: 320000, settlement_state: "WA", region: "Asia" },
+    { country: "Vietnam", latitude: 14.0583, longitude: 108.2772, migrants: 300000, settlement_state: "SA", region: "Asia" },
+    { country: "Sri Lanka", latitude: 7.8731, longitude: 80.7718, migrants: 180000, settlement_state: "NSW", region: "Asia" },
+    { country: "Malaysia", latitude: 4.2105, longitude: 101.9758, migrants: 150000, settlement_state: "VIC", region: "Asia" },
+    { country: "Nepal", latitude: 28.3949, longitude: 84.1240, migrants: 130000, settlement_state: "NSW", region: "Asia" },
+    { country: "South Africa", latitude: -30.5595, longitude: 22.9375, migrants: 120000, settlement_state: "QLD", region: "Africa" },
+    { country: "Pakistan", latitude: 30.3753, longitude: 69.3451, migrants: 110000, settlement_state: "NSW", region: "Asia" },
+    { country: "Italy", latitude: 41.8719, longitude: 12.5674, migrants: 95000, settlement_state: "WA", region: "Europe" },
+    { country: "Greece", latitude: 39.0742, longitude: 21.8243, migrants: 90000, settlement_state: "SA", region: "Europe" },
+    { country: "Indonesia", latitude: -0.7893, longitude: 113.9213, migrants: 85000, settlement_state: "NT", region: "Asia" },
+    { country: "Bangladesh", latitude: 23.685, longitude: 90.3563, migrants: 80000, settlement_state: "NSW", region: "Asia" },
+    { country: "Ireland", latitude: 53.4129, longitude: -8.2439, migrants: 75000, settlement_state: "QLD", region: "Europe" },
+    { country: "Singapore", latitude: 1.3521, longitude: 103.8198, migrants: 70000, settlement_state: "VIC", region: "Asia" },
+    { country: "Hong Kong", latitude: 22.3193, longitude: 114.1694, migrants: 65000, settlement_state: "NSW", region: "Asia" },
+    { country: "United States", latitude: 37.0902, longitude: -95.7129, migrants: 62000, settlement_state: "WA", region: "North America" },
+    { country: "Lebanon", latitude: 33.8547, longitude: 35.8623, migrants: 60000, settlement_state: "NSW", region: "Middle East" },
+    { country: "Fiji", latitude: -17.7134, longitude: 178.065, migrants: 55000, settlement_state: "QLD", region: "Oceania" }
 ];
 
 const migrationTrends = [
@@ -94,7 +95,8 @@ const stateColors = {
     "VIC": "#f97316", 
     "QLD": "#eab308", 
     "WA": "#22c55e", 
-    "SA": "#3b82f6"
+    "SA": "#3b82f6",
+    "NT": "#64748b"
 };
 
 const trendColors = { 
@@ -165,15 +167,15 @@ function renderEnhancedMap() {
     const mapSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
-        "height": mapIsFullscreen ? Math.max(500, window.innerHeight - 150) : 550,
+        "height": mapIsFullscreen ? Math.max(600, window.innerHeight - 150) : 550,
         "autosize": {
             "type": "fit",
             "contains": "padding"
         },
         "projection": { 
             "type": "equalEarth",
-            "center": [135, -25],
-            "scale": mapIsFullscreen ? 180 : 150
+            "center": [0, 0], // Center the map for a global view
+            "scale": mapIsFullscreen ? 200 : 160  // Adjusted scale for a wider world view
         },
         "layer": [
             {
