@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Global Migration to Australia Dashboard</title>
+
+    <!-- Performance/preconnect -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+
+    <!-- Vega / Vega-Lite / vega-embed -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-globe-asia" aria-hidden="true"></i> Global Migration to Australia</h1>
+            <p class="subtitle">Interactive dashboard — explore origins, settlement, and trends (data years shown per chart).</p>
+        </div>
+    </header>
+
+    <main id="main-content" role="main" class="dashboard-container" aria-labelledby="dashboard-title">
+        <h2 id="dashboard-title" class="sr-only">Global Migration to Australia Dashboard</h2>
+
+        <!-- Shortened intro -->
+        <section class="intro-container" role="region" aria-labelledby="about-heading">
+            <h2 id="about-heading"><i class="fas fa-info-circle" aria-hidden="true"></i> About</h2>
+            <div class="intro-text">
+                <p>This dashboard shows major migration flows to Australia, where migrants settle, regional sources, top source countries, and evolving trends. Each chart lists the year(s) of data used.</p>
+            </div>
+        </section>
+
+        <section class="charts-container" aria-live="polite">
+            <!-- Global Migration Flow — large, optionally full-screen -->
+            <div class="chart-row full-width">
+                <div class="chart-box full-width-map" id="mapBox">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-globe-americas" aria-hidden="true"></i> Global Migration Flow</h2>
+                        <div class="fullscreen-toggle">
+                            <label for="mapFullscreenToggle">Full screen</label>
+                            <input id="mapFullscreenToggle" type="checkbox" title="Toggle full screen map" />
+                        </div>
+                    </div>
+
+                    <div id="worldMap" class="chart-container map-container"
+                         role="region"
+                         aria-label="World map showing migration to Australia"
+                         aria-describedby="worldMap-desc">
+                    </div>
+
+                    <div class="chart-description" id="worldMap-desc">
+                        <p><strong>Data year(s):</strong> 2023 (country-level snapshot). <strong>Insight:</strong> The United Kingdom, China, and India emerge as the three largest sources of migrants to Australia, with the UK leading significantly. This geographic diversity highlights Australia's appeal across multiple continents, though Asian and European nations dominate the top contributors.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State / Region -->
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-bar" aria-hidden="true"></i> State Settlement Patterns</h2>
+                    </div>
+                    <div id="stateChart" class="chart-container" role="region" aria-labelledby="stateChart-desc"></div>
+                    <div class="chart-description" id="stateChart-desc">
+                        <p><strong>Data years:</strong> 2023 (snapshot). <strong>Insight:</strong> New South Wales and Victoria dominate migrant settlement, collectively attracting over 60% of all arrivals. This concentration in Australia's two most populous states reflects the gravitational pull of major cities like Sydney and Melbourne, where employment opportunities, established migrant communities, and urban amenities create strong settlement incentives.</p>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-pie" aria-hidden="true"></i> Regional Migration Sources</h2>
+                    </div>
+                    <div id="regionChart" class="chart-container" role="region" aria-labelledby="regionChart-desc"></div>
+                    <div class="chart-description" id="regionChart-desc">
+                        <p><strong>Data years:</strong> 2023 (aggregated). <strong>Insight:</strong> Asia accounts for the overwhelming majority of migration to Australia, reflecting both geographic proximity and strong historical ties. Europe maintains a significant presence as the second-largest source region, while other continents contribute smaller but notable shares to Australia's diverse migrant population.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top sources + Trends -->
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-exchange-alt" aria-hidden="true"></i> Top Source Countries</h2>
+                    </div>
+                    <div id="countryChart" class="chart-container" role="region" aria-labelledby="countryChart-desc"></div>
+                    <div class="chart-description" id="countryChart-desc">
+                        <p><strong>Data year:</strong> 2023. <strong>Insight:</strong> The top three source countries—United Kingdom, India, and China—collectively represent nearly half of all migration to Australia. The remaining seven countries in the top ten demonstrate the breadth of Australia's migration appeal, spanning from Southeast Asia (Philippines, Vietnam, Malaysia) to South Asia (Sri Lanka, Nepal, Pakistan) and Africa (South Africa), illustrating a truly global migration pattern.</p>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-line" aria-hidden="true"></i> Migration Trends Over Time</h2>
+                    </div>
+
+                    <div class="chart-filter-group">
+                        <span>Toggle series:</span>
+                        <label><input type="checkbox" name="trendSeries" value="arrivals" checked /> Arrivals</label>
+                        <label><input type="checkbox" name="trendSeries" value="departures" checked /> Departures</label>
+                        <label><input type="checkbox" name="trendSeries" value="net" checked /> Net</label>
+                    </div>
+                    <small class="chart-subtitle">(Selecting a single series converts the view to a bar chart for clearer comparison.)</small>
+
+                    <div id="trendChart" class="chart-container" role="region" aria-labelledby="trendChart-desc"></div>
+                    <div class="chart-description" id="trendChart-desc">
+                        <p><strong>Data years:</strong> 2014–2024 (yearly). <strong>Insight:</strong> The COVID-19 period shows sharp declines; examine arrivals vs departures to see recovery patterns. Select a single series to view its absolute bars to aid comparisons in a single metric.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visa & Education -->
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-layer-group" aria-hidden="true"></i> Visa &amp; Citizenship Groups</h2>
+                    </div>
+
+                    <div class="chart-filter">
+                        <label for="visaTypeFilter">View by Visa Type:</label>
+                        <select id="visaTypeFilter" aria-controls="visaChart">
+                            <option value="All">All Visa Types</option>
+                            <option value="temporary">Temporary</option>
+                            <option value="australian">Australian Citizens</option>
+                            <option value="permanent">Permanent</option>
+                            <option value="nz">New Zealand Citizens</option>
+                        </select>
+                    </div>
+
+                    <div id="visaChart" class="chart-container" role="region" aria-labelledby="visaChart-desc"></div>
+                    <div class="chart-description" id="visaChart-desc">
+                        <p><strong>Data years:</strong> 2013–2024. <strong>Insight:</strong> Temporary visa holders experienced a dramatic surge post-2021, nearly doubling from pre-pandemic levels by 2022-23. This sharp increase reflects Australia's reopening strategy and growing demand for international students and skilled workers, while permanent migration and citizen returns have remained relatively stable, suggesting a structural shift toward temporary migration pathways.</p>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-graduation-cap" aria-hidden="true"></i> Education Enrollment Rates by Visa Stream and Arrival Period</h2>
+                    </div>
+
+                    <div id="educationChart" class="chart-container" role="region" aria-labelledby="educationChart-desc"></div>
+
+                    <div class="chart-description" id="educationChart-desc">
+                        <p><strong>Data year:</strong> 2019. <strong>Insight:</strong> Humanitarian visa holders show the highest education enrollment rates across all arrival periods, particularly those who arrived before 2010 (10%). This reflects both the younger demographic profile of humanitarian migrants and targeted settlement support programs. Skilled migrants maintain moderate enrollment rates, while family stream migrants show the lowest participation, suggesting different priorities and life stages among visa categories.</p>
+                    </div>
+
+                    <div class="table-controls">
+                        <button id="downloadEducationCSV" class="btn">Download table (CSV)</button>
+                        <button id="showEducationTable" class="btn btn-secondary">View as table</button>
+                        <small class="table-helper-text">For a clearer view of the exact percentages, expand the table below.</small>
+                    </div>
+
+                    <div id="educationTableContainer" style="display:none;">
+                        <!-- filled by script.js -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>Author:</strong> Muskan Gupta | <strong>Date:</strong> 2025-10-19 | <strong>Data Source:</strong> ABS (latest releases)</p>
+        </div>
+    </footer>
+
+    <noscript>
+        <div class="noscript-warning">
+            <strong>JavaScript is required to view the interactive charts.</strong>
+        </div>
+    </noscript>
+
+    <script src="script.js"></script>
+</body>
+</html>
