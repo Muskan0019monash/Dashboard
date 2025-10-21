@@ -43,7 +43,7 @@
         </section>
 
         <section class="charts-container" aria-live="polite">
-            <!-- Global Migration Flow -->
+            <!-- Enhanced Global Migration Flow -->
             <div class="chart-row full-width">
                 <div class="chart-box full-width-map chart-priority-1" id="mapBox">
                     <div class="chart-header">
@@ -53,7 +53,21 @@
                             <input id="mapFullscreenToggle" type="checkbox" title="Toggle full screen map" />
                         </div>
                     </div>
-                    <p class="data-year">Source data: 2023</p>
+                    <div class="map-subtitle">
+                        <p><strong>Visualizing major international migration routes, 2023</strong></p>
+                        <p class="data-source">Data source: 2023 migration estimates</p>
+                    </div>
+
+                    <!-- Region Filter -->
+                    <div class="chart-filter-group">
+                        <span>Filter by region:</span>
+                        <label><input type="checkbox" name="regionFilter" value="All" checked /> All Regions</label>
+                        <label><input type="checkbox" name="regionFilter" value="Asia" /> Asia</label>
+                        <label><input type="checkbox" name="regionFilter" value="Europe" /> Europe</label>
+                        <label><input type="checkbox" name="regionFilter" value="Africa" /> Africa</label>
+                        <label><input type="checkbox" name="regionFilter" value="North America" /> North America</label>
+                        <label><input type="checkbox" name="regionFilter" value="Oceania" /> Oceania</label>
+                    </div>
 
                     <div id="worldMap" class="chart-container map-container"
                          role="region"
@@ -62,7 +76,7 @@
                     </div>
 
                     <div class="chart-description" id="worldMap-desc">
-                        <p><strong>Insight:</strong> The United Kingdom, China, and India emerge as the three largest sources of migrants to Australia, with the UK leading significantly. This geographic diversity highlights Australia's appeal across multiple continents, though Asian and European nations dominate the top contributors.</p>
+                        <p><strong>Insight:</strong> In 2023, the largest migration outflows were observed from China, India, and the UK, with Australia being a top destination. The United Kingdom, China, and India emerge as the three largest sources of migrants to Australia, with the UK leading significantly. This geographic diversity highlights Australia's appeal across multiple continents, though Asian and European nations dominate the top contributors.</p>
                     </div>
                 </div>
             </div>

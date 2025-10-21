@@ -1,4 +1,4 @@
-// script.js - Updated with requested modifications
+// Enhanced script.js with improved world map and warm color scheme
 
 /* ============================
  Utilities & Setup
@@ -8,15 +8,15 @@ function cssVar(name, fallback = '') {
     return v ? v.trim() : fallback;
 }
 
-// Common Vega-Lite config
+// Enhanced Vega-Lite config with warm theme
 const vegaLightThemeConfig = {
     background: "transparent",
     view: { stroke: "transparent" },
     axis: {
-        domainColor: "#cbd5e1",
-        gridColor: "#f1f5f9",
-        labelColor: "#64748b",
-        titleColor: "#1e293b",
+        domainColor: "#fed7aa",
+        gridColor: "#fef3e2",
+        labelColor: "#9a3412",
+        titleColor: "#431407",
         labelFont: cssVar('--font-sans'),
         titleFont: cssVar('--font-sans'),
         labelFontSize: 12,
@@ -25,13 +25,13 @@ const vegaLightThemeConfig = {
         labelAngle: 0
     },
     legend: {
-        labelColor: "#64748b",
-        titleColor: "#1e293b",
+        labelColor: "#9a3412",
+        titleColor: "#431407",
         labelFont: cssVar('--font-sans'),
         titleFont: cssVar('--font-sans'),
     },
     title: {
-        color: "#1e293b",
+        color: "#431407",
         font: cssVar('--font-sans'),
         fontSize: 16,
         fontWeight: 600
@@ -63,74 +63,193 @@ let migrationData = [
  {country:"Lebanon",latitude:33.8547,longitude:35.8623,migrants:60000,settlement_state:"NSW",region:"Middle East",year:2023},
  {country:"Fiji",latitude:-17.7134,longitude:178.065,migrants:55000,settlement_state:"QLD",region:"Oceania",year:2023}
 ];
+
 const migrationTrends = [
  { year: "2014", arrivals: 1844, departures: 1109, net: 735 }, { year: "2015", arrivals: 1869, departures: 1132, net: 737 }, { year: "2016", arrivals: 2003, departures: 1124, net: 879 }, { year: "2017", arrivals: 2136, departures: 1124, net: 1012 }, { year: "2018", arrivals: 2120, departures: 1149, net: 971 }, { year: "2019", arrivals: 2261, departures: 1279, net: 982 }, { year: "2020", arrivals: 1722, departures: 1220, net: 502 }, { year: "2021", arrivals: 637, departures: 866, net: -229 }, { year: "2022", arrivals: 2188, departures: 882, net: 1306 }, { year: "2023", arrivals: 2941, departures: 820, net: 2121 }, { year: "2024", arrivals: 2131, departures: 644, net: 1487 }
 ];
+
 const visaData = [
  { year: "2013-14", temporary: 253.16, australian: 72.18, permanent: 94.35, nz: 37.77, unknown: 7.21 }, { year: "2014-15", temporary: 262.93, australian: 71.68, permanent: 91.49, nz: 31.75, unknown: 7.40 }, { year: "2015-16", temporary: 281.76, australian: 75.80, permanent: 90.59, nz: 33.70, unknown: 7.43 }, { year: "2016-17", temporary: 314.82, australian: 79.28, permanent: 106.20, nz: 32.33, unknown: 7.53 }, { year: "2017-18", temporary: 327.30, australian: 77.16, permanent: 87.91, nz: 30.38, unknown: 4.77 }, { year: "2018-19", temporary: 350.67, australian: 78.90, permanent: 85.39, nz: 30.54, unknown: 4.90 }, { year: "2019-20", temporary: 313.66, australian: 96.41, permanent: 70.89, nz: 22.22, unknown: 3.67 }, { year: "2020-21", temporary: 29.58, australian: 61.37, permanent: 36.95, nz: 16.95, unknown: 1.15 }, { year: "2021-22", temporary: 266.21, australian: 62.48, permanent: 71.10, nz: 24.12, unknown: 2.82 }, { year: "2022-23", temporary: 556.62, australian: 58.75, permanent: 80.39, nz: 42.66, unknown: 0.96 }, { year: "2023-24", temporary: 464.78, australian: 60.04, permanent: 90.88, nz: 51.10, unknown: 0.00 }
 ];
+
 const educationData = [
  { visaStream: "Skilled", "2015-2019": 2.0, "2010-2014": 5.6, "Before 2010": 7.7, Total: 5.8 }, { visaStream: "Family", "2015-2019": 1.2, "2010-2014": 4.1, "Before 2010": 4.4, Total: 3.4 }, { visaStream: "Humanitarian", "2015-2019": 2.7, "2010-2014": 7.1, "Before 2010": 10.0, Total: 7.4 }, { visaStream: "All permanent migrants", "2015-2019": 1.8, "2010-2014": 5.2, "Before 2010": 6.9, Total: 5.0 }
 ];
 
 /* ============================
- Theming & Colors
+ Theming & Colors - Enhanced warm palette
  ============================ */
-const regionColorMap = { "Asia": cssVar('--region-asia'), "Europe": cssVar('--region-europe'), "Africa": cssVar('--region-africa'), "Oceania": cssVar('--region-oceania'), "North America": cssVar('--region-north-america'), "Middle East": cssVar('--region-middle-east'), "South America": cssVar('--region-south-america') };
-const stateColors = { "NSW": cssVar('--nsw'), "VIC": cssVar('--vic'), "QLD": cssVar('--qld'), "WA": cssVar('--wa'), "SA": cssVar('--sa') };
-const trendColors = { arrivals: cssVar('--secondary'), departures: cssVar('--accent'), net: cssVar('--region-europe') };
-const visaColors = { domain: ["temporary", "australian", "permanent", "nz", "unknown"], range: [cssVar('--secondary'), '#8b5cf6', cssVar('--qld'), cssVar('--primary'), '#94a3b8'] };
+const regionColorMap = { 
+    "Asia": "#dc2626", 
+    "Europe": "#7c2d12", 
+    "Africa": "#ea580c", 
+    "Oceania": "#059669", 
+    "North America": "#b91c1c", 
+    "Middle East": "#be185d", 
+    "South America": "#0891b2" 
+};
+
+const stateColors = { 
+    "NSW": "#dc2626", 
+    "VIC": "#b91c1c", 
+    "QLD": "#ea580c", 
+    "WA": "#7c2d12", 
+    "SA": "#059669" 
+};
+
+const trendColors = { 
+    arrivals: "#ea580c", 
+    departures: "#f59e0b", 
+    net: "#7c2d12" 
+};
+
+const visaColors = { 
+    domain: ["temporary", "australian", "permanent", "nz", "unknown"], 
+    range: ["#ea580c", "#7c2d12", "#f59e0b", "#dc2626", "#94a3b8"] 
+};
 
 /* ============================
- Map Rendering
+ Enhanced Map Rendering
  ============================ */
 let mapIsFullscreen = false;
+let selectedRegions = ["All"];
+
+function formatMigrationNumber(num) {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+    return num.toString();
+}
 
 function computeSizeRange(numPoints) {
     const vw = Math.max(document.documentElement.clientWidth || 900, 900);
-    const baseMin = Math.max(40, Math.round(vw * 0.04));
-    const baseMax = Math.min(4000, Math.round(vw * 0.4));
-    const divisor = Math.max(1, Math.sqrt(Math.max(1, numPoints)) / 3);
+    const baseMin = Math.max(60, Math.round(vw * 0.05));
+    const baseMax = Math.min(5000, Math.round(vw * 0.5));
+    const divisor = Math.max(1, Math.sqrt(Math.max(1, numPoints)) / 2.5);
     return [baseMin, Math.round(baseMax / divisor)];
 }
 
 function normalizePointsForMap() {
-    return (migrationData || []).map(d => ({ country: d.country || '', lat: +d.latitude, lon: +d.longitude, migrants: +d.migrants || 0, region: d.region || 'Other', settlement_state: d.settlement_state || '' })).filter(p => p.lat && p.lon);
+    let points = (migrationData || []).map(d => ({ 
+        country: d.country || '', 
+        lat: +d.latitude, 
+        lon: +d.longitude, 
+        migrants: +d.migrants || 0, 
+        region: d.region || 'Other', 
+        settlement_state: d.settlement_state || '',
+        migrantsFormatted: formatMigrationNumber(+d.migrants || 0)
+    })).filter(p => p.lat && p.lon);
+
+    // Filter by selected regions
+    if (!selectedRegions.includes("All")) {
+        points = points.filter(p => selectedRegions.includes(p.region));
+    }
+
+    return points;
 }
 
-function renderMap() {
+function getTopCountries(points, count = 5) {
+    return points
+        .sort((a, b) => b.migrants - a.migrants)
+        .slice(0, count)
+        .map(p => ({ ...p, isTop: true }));
+}
+
+function renderEnhancedMap() {
     const points = normalizePointsForMap();
     if (!points.length) return;
+    
     const sizeRange = computeSizeRange(points.length);
+    const topCountries = getTopCountries(points, 5);
 
     const mapSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": mapIsFullscreen ? Math.max(420, window.innerHeight - 150) : 550,
+        "width": "container", 
+        "height": mapIsFullscreen ? Math.max(500, window.innerHeight - 150) : 600,
+        "projection": { 
+            "type": "equalEarth",
+            "center": [135, -25],
+            "scale": mapIsFullscreen ? 180 : 150
+        },
         "layer": [
             {
-                "data": { "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json", "format": { "type": "topojson", "feature": "countries" } },
-                "projection": { "type": "equirectangular" },
-                "mark": { "type": "geoshape", "fill": "#e0e7ff", "stroke": "#000000", "strokeWidth": 1 }
+                "data": { 
+                    "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json", 
+                    "format": { "type": "topojson", "feature": "countries" } 
+                },
+                "mark": { 
+                    "type": "geoshape", 
+                    "fill": "#f9fafb", 
+                    "stroke": "#d1d5db", 
+                    "strokeWidth": 0.5 
+                }
             },
             {
                 "data": { "values": points },
-                "mark": { "type": "circle", "filled": true, "tooltip": true, "stroke": "#1e293b", "strokeWidth": 1.5, "opacity": 0.75 },
+                "mark": { 
+                    "type": "circle", 
+                    "filled": true, 
+                    "tooltip": true, 
+                    "stroke": "#431407", 
+                    "strokeWidth": 1.5, 
+                    "opacity": 0.6 
+                },
                 "encoding": {
                     "longitude": { "field": "lon", "type": "quantitative" },
                     "latitude": { "field": "lat", "type": "quantitative" },
-                    "size": { "field": "migrants", "type": "quantitative", "scale": { "range": sizeRange }, "title": "Migrants" },
-                    "color": { "field": "migrants", "type": "quantitative", "scale": { "scheme": "viridis" }, "legend": { "title": "Migration Volume" } },
-                    "tooltip": [{ "field": "country", "title": "Country" }, { "field": "migrants", "title": "Migrants", "format": "," }, { "field": "region", "title": "Region" }]
+                    "size": { 
+                        "field": "migrants", 
+                        "type": "quantitative", 
+                        "scale": { "range": sizeRange },
+                        "legend": {
+                            "title": "Migration Volume (Number of Migrants, 2023)",
+                            "format": ".0s",
+                            "values": [50000, 200000, 500000, 1000000],
+                            "symbolType": "circle"
+                        }
+                    },
+                    "color": { 
+                        "field": "migrants", 
+                        "type": "quantitative", 
+                        "scale": { "scheme": "turbo" },
+                        "legend": null
+                    },
+                    "tooltip": [
+                        { "field": "country", "title": "Country" }, 
+                        { "field": "migrantsFormatted", "title": "Migration Volume" }, 
+                        { "field": "region", "title": "Region" },
+                        { "field": "settlement_state", "title": "Primary Settlement State" }
+                    ]
+                }
+            },
+            {
+                "data": { "values": topCountries },
+                "mark": { 
+                    "type": "text", 
+                    "align": "center", 
+                    "baseline": "middle", 
+                    "dx": 0, 
+                    "dy": -15,
+                    "fontSize": 10,
+                    "fontWeight": "bold",
+                    "fill": "#431407",
+                    "stroke": "#fffbf5",
+                    "strokeWidth": 2
+                },
+                "encoding": {
+                    "longitude": { "field": "lon", "type": "quantitative" },
+                    "latitude": { "field": "lat", "type": "quantitative" },
+                    "text": { "field": "country", "type": "nominal" }
                 }
             }
         ],
         "config": vegaLightThemeConfig
     };
+    
     vegaEmbed('#worldMap', mapSpec, { actions: false, renderer: 'svg' }).catch(console.error);
 }
 
 /* ============================
- Chart Renderers
+ Chart Renderers with Enhanced Colors
  ============================ */
 function renderStateChart() {
     const agg = {};
@@ -171,7 +290,7 @@ function renderRegionChart() {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 280,
         "data": { "values": rows },
-        "mark": { "type": "arc", "innerRadius": 70, "tooltip": true, "stroke": "#ffffff", "strokeWidth": 2 },
+        "mark": { "type": "arc", "innerRadius": 70, "tooltip": true, "stroke": "#fffbf5", "strokeWidth": 2 },
         "encoding": {
             "theta": { "field": "migrants", "type": "quantitative", "stack": true },
             "color": { "field": "region", "type": "nominal", "scale": { "domain": regionDomain, "range": regionRange }, "title": "Region" },
@@ -200,7 +319,7 @@ function setupRegionTable(data) {
     toggleBtn.onclick = () => {
         const isVisible = tableContainer.style.display === 'block';
         tableContainer.style.display = isVisible ? 'none' : 'block';
-        toggleBtn.textContent = isVisible ? 'Hide table' : 'View as table';
+        toggleBtn.textContent = isVisible ? 'View as table' : 'Hide table';
     };
 }
 
@@ -216,7 +335,7 @@ function renderCountryChart() {
         "encoding": {
             "y": { "field": "country", "type": "nominal", "sort": "-x", "title": null },
             "x": { "field": "migrants", "type": "quantitative", "title": "Number of Migrants" },
-            "color": { "field": "migrants", "type": "quantitative", "scale": { "scheme": "blues" }, "legend": null },
+            "color": { "field": "migrants", "type": "quantitative", "scale": { "scheme": "oranges" }, "legend": null },
             "tooltip": [{ "field": "country", "title": "Country" }, { "field": "migrants", "title": "Migrants", "format": "," }, { "field": "region", "title": "Region" }, { "field": "rank", "title": "Rank" }]
         },
         "config": vegaLightThemeConfig
@@ -283,11 +402,11 @@ function renderVisaChart(selectedVisaType = "All") {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
             "width": "container", "height": 320,
             "data": { "values": visaData },
-            "mark": { "type": "line", "point": { "filled": false, "fill": "#ffffff" }, "strokeWidth": 3, "tooltip": true },
+            "mark": { "type": "line", "point": { "filled": false, "fill": "#fffbf5" }, "strokeWidth": 3, "tooltip": true },
             "encoding": {
                 "x": { "field": "year", "type": "ordinal", "title": "Year", "axis": { "labelAngle": -45 } },
                 "y": { "field": selectedVisaType, "type": "quantitative", "title": "Number (thousands)" },
-                "color": { "value": visaColors.range[visaColors.domain.indexOf(selectedVisaType)] || cssVar('--primary') }
+                "color": { "value": visaColors.range[visaColors.domain.indexOf(selectedVisaType)] || "#c2410c" }
             }
         };
     }
@@ -301,11 +420,11 @@ function renderEducationChart() {
         "width": "container", "height": 280,
         "data": { "values": educationData },
         "transform": [{ "fold": ["2015-2019", "2010-2014", "Before 2010", "Total"], "as": ["category", "percentage"] }],
-        "mark": { "type": "rect", "tooltip": true, "stroke": "#ffffff", "strokeWidth": 2 },
+        "mark": { "type": "rect", "tooltip": true, "stroke": "#fffbf5", "strokeWidth": 2 },
         "encoding": {
             "x": { "field": "visaStream", "type": "nominal", "title": "Visa Stream" },
             "y": { "field": "category", "type": "nominal", "title": "Arrival Period", "sort": ["2015-2019", "2010-2014", "Before 2010", "Total"] },
-            "color": { "field": "percentage", "type": "quantitative", "scale": { "scheme": "teals" }, "title": "% Enrolled" },
+            "color": { "field": "percentage", "type": "quantitative", "scale": { "scheme": "oranges" }, "title": "% Enrolled" },
             "tooltip": [{ "field": "visaStream", "title": "Visa Stream" }, { "field": "category", "title": "Period" }, { "field": "percentage", "title": "% Enrolled", "format": ".1f" }]
         },
         "config": vegaLightThemeConfig
@@ -337,6 +456,53 @@ function setupEducationTable() {
 }
 
 /* ============================
+ Region Filtering for Map
+ ============================ */
+function handleRegionFilter() {
+    const checkboxes = document.querySelectorAll('input[name="regionFilter"]');
+    const allCheckbox = document.querySelector('input[name="regionFilter"][value="All"]');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            if (checkbox.value === 'All') {
+                if (checkbox.checked) {
+                    // Uncheck all other checkboxes
+                    checkboxes.forEach(cb => {
+                        if (cb.value !== 'All') cb.checked = false;
+                    });
+                    selectedRegions = ['All'];
+                } else {
+                    checkbox.checked = true; // Prevent unchecking "All" when it's the only one
+                }
+            } else {
+                // If any specific region is checked, uncheck "All"
+                if (checkbox.checked) {
+                    allCheckbox.checked = false;
+                    selectedRegions = Array.from(document.querySelectorAll('input[name="regionFilter"]:checked'))
+                        .map(cb => cb.value)
+                        .filter(v => v !== 'All');
+                    
+                    if (selectedRegions.length === 0) {
+                        allCheckbox.checked = true;
+                        selectedRegions = ['All'];
+                    }
+                } else {
+                    selectedRegions = Array.from(document.querySelectorAll('input[name="regionFilter"]:checked'))
+                        .map(cb => cb.value)
+                        .filter(v => v !== 'All');
+                    
+                    if (selectedRegions.length === 0) {
+                        allCheckbox.checked = true;
+                        selectedRegions = ['All'];
+                    }
+                }
+            }
+            renderEnhancedMap();
+        });
+    });
+}
+
+/* ============================
  Initializer & Event Binding
  ============================ */
 function bindUI() {
@@ -344,12 +510,14 @@ function bindUI() {
     document.getElementById('visaTypeFilter')?.addEventListener('change', (e) => renderVisaChart(e.target.value));
     document.getElementById('mapFullscreenToggle')?.addEventListener('change', e => {
         mapIsFullscreen = e.target.checked;
-        renderMap();
+        renderEnhancedMap();
     });
+    
+    handleRegionFilter();
 }
 
 function renderAllCharts() {
-    renderMap();
+    renderEnhancedMap();
     renderStateChart();
     renderRegionChart();
     renderCountryChart();
