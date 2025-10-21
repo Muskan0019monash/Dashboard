@@ -74,17 +74,6 @@
                         <h2><i class="fas fa-chart-bar" aria-hidden="true"></i> State Settlement Patterns</h2>
                     </div>
                     <p class="data-year">Source data: 2023</p>
-                    <div class="chart-filter">
-                        <label for="stateFilter">Filter by State:</label>
-                        <select id="stateFilter" aria-controls="stateChart" multiple>
-                            <option value="All" selected>All States</option>
-                            <option value="NSW">New South Wales</option>
-                            <option value="VIC">Victoria</option>
-                            <option value="QLD">Queensland</option>
-                            <option value="WA">Western Australia</option>
-                            <option value="SA">South Australia</option>
-                        </select>
-                    </div>
                     <div id="stateChart" class="chart-container" role="region" aria-labelledby="stateChart-desc"></div>
                     <div class="chart-description" id="stateChart-desc">
                         <p><strong>Insight:</strong> New South Wales and Victoria dominate migrant settlement, collectively attracting over 60% of all arrivals. This concentration in Australia's two most populous states reflects the gravitational pull of major cities like Sydney and Melbourne, where employment opportunities, established migrant communities, and urban amenities create strong settlement incentives.</p>
@@ -99,6 +88,12 @@
                     <div id="regionChart" class="chart-container" role="region" aria-labelledby="regionChart-desc"></div>
                     <div class="chart-description" id="regionChart-desc">
                         <p><strong>Insight:</strong> Asia accounts for the overwhelming majority of migration to Australia, reflecting both geographic proximity and strong historical ties. Europe maintains a significant presence as the second-largest source region, while other continents contribute smaller but notable shares to Australia's diverse migrant population.</p>
+                    </div>
+                     <div class="table-controls">
+                        <button id="showRegionTable" class="btn btn-secondary">View as table</button>
+                    </div>
+                    <div id="regionTableContainer" style="display:none;">
+                        <!-- filled by script.js -->
                     </div>
                 </div>
             </div>

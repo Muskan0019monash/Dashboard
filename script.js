@@ -80,7 +80,6 @@ const regionColorMap = { "Asia": cssVar('--region-asia'), "Europe": cssVar('--re
 const stateColors = { "NSW": cssVar('--nsw'), "VIC": cssVar('--vic'), "QLD": cssVar('--qld'), "WA": cssVar('--wa'), "SA": cssVar('--sa') };
 const trendColors = { arrivals: cssVar('--secondary'), departures: cssVar('--accent'), net: cssVar('--region-europe') };
 const visaColors = { domain: ["temporary", "australian", "permanent", "nz", "unknown"], range: [cssVar('--secondary'), '#8b5cf6', cssVar('--qld'), cssVar('--primary'), '#94a3b8'] };
-const countryColorPalette = ['#dc2626', '#ea580c', '#f59e0b', '#84cc16', '#10b981', '#14b8a6', '#8b5cf6', '#ec4899', '#f43f5e', '#a855f7'];
 
 /* ============================
  Map Rendering
@@ -89,8 +88,8 @@ let mapIsFullscreen = false;
 
 function computeSizeRange(numPoints) {
     const vw = Math.max(document.documentElement.clientWidth || 900, 900);
-    const baseMin = Math.max(40, Math.round(vw * 0.04)); // Doubled
-    const baseMax = Math.min(4000, Math.round(vw * 0.4)); // Doubled
+    const baseMin = Math.max(40, Math.round(vw * 0.04));
+    const baseMax = Math.min(4000, Math.round(vw * 0.4));
     const divisor = Math.max(1, Math.sqrt(Math.max(1, numPoints)) / 3);
     return [baseMin, Math.round(baseMax / divisor)];
 }
@@ -133,7 +132,7 @@ function renderMap() {
 /* ============================
  Chart Renderers
  ============================ */
-function renderStateChart(selectedStates = ["All"]) {
+function renderStateChart() {
     const agg = {};
     migrationData.forEach(d => {
         const s = (d.settlement_state || '').trim();
@@ -141,10 +140,6 @@ function renderStateChart(selectedStates = ["All"]) {
         agg[s] = (agg[s] || 0) + (+d.migrants || 0);
     });
     let rows = Object.keys(agg).map(k => ({ settlement_state: k, migrants: agg[k] }));
-
-    if (selectedStates && !selectedStates.includes("All")) {
-        rows = rows.filter(r => selectedStates.includes(r.settlement_state));
-    }
 
     const spec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -176,32 +171,42 @@ function renderRegionChart() {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 280,
         "data": { "values": rows },
-        "layer": [
-            {
-                "mark": { "type": "arc", "innerRadius": 70, "tooltip": true, "stroke": "#ffffff", "strokeWidth": 2 },
-                "encoding": {
-                    "theta": { "field": "migrants", "type": "quantitative", "stack": true },
-                    "color": { "field": "region", "type": "nominal", "scale": { "domain": regionDomain, "range": regionRange }, "title": "Region" },
-                    "tooltip": [{ "field": "region", "title": "Region" }, { "field": "migrants", "title": "Migrants", "format": "," }]
-                }
-            },
-            {
-                "mark": { "type": "text", "radiusOffset": 20, "fontSize": 12, "fontWeight": "bold", "fill": "white", "stroke": "black", "strokeWidth": 0.4 },
-                "encoding": {
-                    "theta": { "field": "migrants", "type": "quantitative", "stack": true },
-                    "text": { "field": "migrants", "type": "quantitative", "format": ".2s" },
-                    "opacity": { "condition": { "test": "datum.migrants > 100000", "value": 1 }, "value": 0 }
-                }
-            }
-        ],
+        "mark": { "type": "arc", "innerRadius": 70, "tooltip": true, "stroke": "#ffffff", "strokeWidth": 2 },
+        "encoding": {
+            "theta": { "field": "migrants", "type": "quantitative", "stack": true },
+            "color": { "field": "region", "type": "nominal", "scale": { "domain": regionDomain, "range": regionRange }, "title": "Region" },
+            "tooltip": [{ "field": "region", "title": "Region" }, { "field": "migrants", "title": "Migrants", "format": "," }]
+        },
         "config": vegaLightThemeConfig
     };
     vegaEmbed('#regionChart', spec, { actions: false, renderer: 'svg' }).catch(console.error);
+    setupRegionTable(rows);
+}
+
+function setupRegionTable(data) {
+    const tableContainer = document.getElementById('regionTableContainer');
+    const toggleBtn = document.getElementById('showRegionTable');
+    if (!tableContainer || !toggleBtn) return;
+
+    let tableHTML = `<table id="regionTable"><thead><tr>
+        <th>Region</th><th>Number of Migrants</th>
+        </tr></thead><tbody>`;
+    data.sort((a,b) => b.migrants - a.migrants).forEach(r => {
+        tableHTML += `<tr><td>${r.region}</td><td>${r.migrants.toLocaleString()}</td></tr>`;
+    });
+    tableHTML += '</tbody></table>';
+    tableContainer.innerHTML = tableHTML;
+
+    toggleBtn.onclick = () => {
+        const isVisible = tableContainer.style.display === 'block';
+        tableContainer.style.display = isVisible ? 'none' : 'block';
+        toggleBtn.textContent = isVisible ? 'Hide table' : 'View as table';
+    };
 }
 
 function renderCountryChart() {
     const sorted = (migrationData || []).slice().sort((a, b) => (b.migrants || 0) - (a.migrants || 0)).slice(0, 10);
-    const rows = sorted.map((d, i) => ({ country: d.country, migrants: +d.migrants, rank: i + 1, region: d.region, color: countryColorPalette[i % countryColorPalette.length] }));
+    const rows = sorted.map((d, i) => ({ country: d.country, migrants: +d.migrants, rank: i + 1, region: d.region }));
 
     const spec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -211,7 +216,7 @@ function renderCountryChart() {
         "encoding": {
             "y": { "field": "country", "type": "nominal", "sort": "-x", "title": null },
             "x": { "field": "migrants", "type": "quantitative", "title": "Number of Migrants" },
-            "color": { "field": "color", "type": "nominal", "scale": null, "legend": null },
+            "color": { "field": "migrants", "type": "quantitative", "scale": { "scheme": "blues" }, "legend": null },
             "tooltip": [{ "field": "country", "title": "Country" }, { "field": "migrants", "title": "Migrants", "format": "," }, { "field": "region", "title": "Region" }, { "field": "rank", "title": "Rank" }]
         },
         "config": vegaLightThemeConfig
@@ -340,10 +345,6 @@ function bindUI() {
     document.getElementById('mapFullscreenToggle')?.addEventListener('change', e => {
         mapIsFullscreen = e.target.checked;
         renderMap();
-    });
-    document.getElementById('stateFilter')?.addEventListener('change', (e) => {
-        const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
-        renderStateChart(selected);
     });
 }
 
