@@ -10,34 +10,34 @@
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     
     /* Main theme colors */
-    --primary: #2563eb; /* Blue */
-    --secondary: #06b6d4; /* Cyan */
-    --accent: #f59e0b; /* Amber */
+    --primary: #2563eb;
+    --secondary: #06b6d4;
+    --accent: #f59e0b;
 
-    /* Background colors - Blue theme */
-    --bg-main: #1e3a8a; /* Deep blue for main background */
-    --bg-light: #3b82f6; /* Lighter blue */
-    --card-bg: #ffffff; /* White for charts */
+    /* Background colors */
+    --bg-main: #0f172a;
+    --bg-light: #1e293b;
+    --card-bg: #ffffff;
     
     --text: #1e293b;
     --text-light: #64748b;
     --border: #e2e8f0;
 
-    /* Region colors - distinct and consistent */
-    --region-asia: #3b82f6;        /* Blue */
-    --region-europe: #8b5cf6;      /* Purple */
-    --region-africa: #f59e0b;      /* Amber */
-    --region-oceania: #10b981;     /* Green */
-    --region-north-america: #ef4444; /* Red */
-    --region-middle-east: #ec4899; /* Pink */
-    --region-south-america: #14b8a6; /* Teal */
+    /* Region colors */
+    --region-asia: #3b82f6;
+    --region-europe: #8b5cf6;
+    --region-africa: #f59e0b;
+    --region-oceania: #10b981;
+    --region-north-america: #ef4444;
+    --region-middle-east: #ec4899;
+    --region-south-america: #14b8a6;
 
-    /* State colors - vibrant & distinct */
-    --nsw: #3b82f6;    /* Blue */
-    --vic: #ef4444;    /* Red */
-    --qld: #f59e0b;    /* Amber */
-    --wa: #8b5cf6;     /* Purple */
-    --sa: #10b981;     /* Green */
+    /* State colors */
+    --nsw: #3b82f6;
+    --vic: #ef4444;
+    --qld: #f59e0b;
+    --wa: #8b5cf6;
+    --sa: #10b981;
 }
 
 /* Custom Scrollbar */
@@ -57,7 +57,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     background-attachment: fixed;
     color: var(--text);
     font-family: var(--font-sans);
@@ -94,7 +94,7 @@ body {
 header {
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
     color: white;
-    padding: 3rem 1rem;
+    padding: 2.5rem 1rem;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -122,17 +122,8 @@ header::before {
 header h1 {
     font-size: 2.8rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
     letter-spacing: -1px;
     color: #ffffff;
-}
-
-.subtitle {
-    font-size: 1.2rem;
-    font-weight: 300;
-    color: rgba(255, 255, 255, 0.9);
-    max-width: 600px;
-    margin: 0.5rem auto 0;
 }
 
 .dashboard-container {
@@ -142,27 +133,40 @@ header h1 {
 }
 
 .intro-container {
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.98);
     border-radius: 12px;
-    padding: 2rem;
+    padding: 1.5rem 2rem;
     margin-bottom: 2.5rem;
-    border-left: 4px solid var(--primary);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: center;
 }
 
-.intro-container h2 {
-    color: var(--primary);
-    margin-bottom: 1rem;
+.about-icon {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    border-radius: 10px;
+    color: white;
     font-size: 1.5rem;
+    flex-shrink: 0;
 }
 
-.intro-text {
-    font-size: 1.1rem;
-    line-height: 1.7;
+.about-content h2 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.about-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
     color: var(--text);
 }
 
@@ -200,6 +204,12 @@ header h1 {
     opacity: 0;
 }
 
+/* Priority-based sizing */
+.chart-priority-1 { min-height: 600px; }
+.chart-priority-2, .chart-priority-3, .chart-priority-4 { min-height: 500px; }
+.chart-priority-5, .chart-priority-6 { min-height: 450px; }
+.chart-priority-7 { min-height: 400px; }
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -218,7 +228,7 @@ header h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid var(--border);
 }
@@ -237,6 +247,14 @@ header h1 {
     font-size: 1.3rem;
 }
 
+.data-year {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 1rem;
+    padding-left: 0.25rem;
+}
+
 .chart-container {
     width: 100%;
     flex: 1;
@@ -248,7 +266,7 @@ header h1 {
 }
 
 .chart-description {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     padding: 1rem;
     background-color: #f8fafc;
     border-radius: 8px;
@@ -309,6 +327,11 @@ select, .btn {
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+select[multiple] {
+    min-height: 60px;
+    padding: 0.5rem;
 }
 
 select:hover, .btn:hover {
@@ -390,8 +413,18 @@ footer {
     box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.footer-content strong {
+.footer-content p {
+    margin-bottom: 0.5rem;
+}
+
+.footer-content a {
     color: #fbbf24;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
 }
 
 .noscript-warning {
@@ -404,15 +437,18 @@ footer {
 }
 
 @media (max-width: 768px) {
-    header h1 {
-        font-size: 2.2rem;
+    header h1 { font-size: 2.2rem; }
+    .intro-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1.5rem;
     }
-    .subtitle {
-        font-size: 1rem;
+    .about-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
     }
-    .map-container {
-        min-height: 400px;
-    }
+    .map-container { min-height: 400px; }
     .chart-filter, .chart-filter-group {
         flex-direction: column;
         align-items: flex-start;
